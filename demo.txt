@@ -1,3 +1,7 @@
-This is demo file
-try
-try
+SiteRoast is a fun yet practical web application that analyzes websites and provides:
+
+🎨 UI/UX feedback
+⚡ Performance observations
+🔍 SEO suggestions
+🛡️ Security insights
+😂 Funny AI-generated website roasts
