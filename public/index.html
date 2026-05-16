@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ऊस कामगार AI App</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+
+<!-- ── SIDEBAR NAV ── -->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <span class="logo">🌾 ऊस AI</span>
+    <button class="close-btn" onclick="toggleSidebar()">✕</button>
+  </div>
+  <ul>
+    <li onclick="showSection('dashboard')"><i class="fa fa-home"></i> Home Dashboard</li>
+    <li onclick="showSection('worker')"><i class="fa fa-user"></i> Worker Info</li>
+    <li onclick="showSection('location')"><i class="fa fa-map-marker-alt"></i> Location Tracking</li>
+    <li onclick="showSection('attendance')"><i class="fa fa-calendar-check"></i> Attendance & Payment</li>
+    <li onclick="showSection('chatbot')"><i class="fa fa-robot"></i> AI Assistant</li>
+    <li onclick="showSection('health')"><i class="fa fa-heartbeat"></i> Health & Safety</li>
+    <li onclick="showSection('crop')"><i class="fa fa-seedling"></i> Crop AI</li>
+    <li onclick="showSection('schemes')"><i class="fa fa-file-alt"></i> Govt Schemes</li>
+    <li onclick="showSection('factory')"><i class="fa fa-industry"></i> Sugar Factory</li>
+    <li onclick="showSection('contractor')"><i class="fa fa-hard-hat"></i> Contractor Panel</li>
+  </ul>
+</nav>
+
+<!-- ── TOP BAR ── -->
+<div class="topbar">
+  <button class="menu-btn" onclick="toggleSidebar()"><i class="fa fa-bars"></i></button>
+  <span class="topbar-title" id="topbar-title">Home Dashboard</span>
+  <span class="topbar-weather" id="topbar-weather">🌡️ लोड होत आहे...</span>
+</div>
+
+<!-- ── MAIN CONTENT ── -->
+<main class="main-content">
+
+  <!-- 1. DASHBOARD -->
+  <section id="dashboard" class="section active">
+    <div class="card-grid">
+      <div class="card green">
+        <i class="fa fa-sun"></i>
+        <h3>आजचे काम</h3>
+        <p>शेत नं. 4 - सकाळी 6:00</p>
+      </div>
+      <div class="card blue">
+        <i class="fa fa-cloud-sun-rain"></i>
+        <h3>हवामान</h3>
+        <p id="weather-info">लोड होत आहे...</p>
+      </div>
+      <div class="card orange">
+        <i class="fa fa-cut"></i>
+        <h3>कापणी स्थिती</h3>
+        <p>12 टन आज पूर्ण</p>
+      </div>
+      <div class="card red">
+        <i class="fa fa-exclamation-triangle"></i>
+        <h3>सुरक्षा अलर्ट</h3>
+        <p>उष्माघाताचा धोका - पाणी प्या</p>
+      </div>
+    </div>
+    <div class="summary-box">
+      <h3>📊 आठवड्याचा सारांश</h3>
+      <div class="summary-row"><span>एकूण टन</span><span id="sum-tons">-</span></div>
+      <div class="summary-row"><span>एकूण कमाई</span><span id="sum-pay">-</span></div>
+      <div class="summary-row"><span>बाकी पैसे</span><span id="sum-pending">-</span></div>
+    </div>
+  </section>
+
+  <!-- 2. WORKER INFO -->
+  <section id="worker" class="section">
+    <h2>👤 Worker माहिती</h2>
+    <form id="worker-form" class="form">
+      <input type="text" id="w-name" placeholder="पूर्ण नाव" required />
+      <input type="text" id="w-aadhaar" placeholder="आधार नंबर" maxlength="12" />
+      <input type="text" id="w-village" placeholder="गाव" />
+      <input type="tel" id="w-phone" placeholder="फोन नंबर" />
+      <input type="text" id="w-family" placeholder="कुटुंब तपशील" />
+      <input type="number" id="w-exp" placeholder="अनुभव (वर्षे)" />
+      <select id="w-role">
+        <option value="worker">कामगार</option>
+        <option value="contractor">कंत्राटदार</option>
+        <option value="farmer">शेतकरी</option>
+      </select>
+      <button type="submit" class="btn-primary">नोंदणी करा</button>
+    </form>
+    <div id="worker-list" class="list-box"></div>
+  </section>
+
+  <!-- 3. LOCATION -->
+  <section id="location" class="section">
+    <h2>📍 Location Tracking</h2>
+    <div class="card blue" style="margin-bottom:1rem">
+      <p id="gps-status">GPS शोधत आहे...</p>
+      <p id="gps-coords"></p>
+    </div>
+    <button class="btn-primary" onclick="getLocation()"><i class="fa fa-map-marker-alt"></i> माझे Location शोधा</button>
+    <div id="map-placeholder" class="map-box">
+      <p>📍 Map येथे दिसेल (Google Maps API key जोडा)</p>
+    </div>
+    <div class="card green" style="margin-top:1rem">
+      <h3>🏭 जवळचे कारखाने</h3>
+      <div id="nearby-factories">लोड होत आहे...</div>
+    </div>
+  </section>
+
+  <!-- 4. ATTENDANCE & PAYMENT -->
+  <section id="attendance" class="section">
+    <h2>📅 Attendance & 💰 Payment</h2>
+    <form id="attendance-form" class="form">
+      <input type="text" id="a-workerid" placeholder="Worker ID" required />
+      <input type="date" id="a-date" />
+      <input type="number" id="a-tons" placeholder="आज किती टन?" step="0.1" required />
+      <input type="number" id="a-rate" placeholder="दर प्रति टन (₹)" value="350" />
+      <button type="submit" class="btn-primary">Attendance नोंदवा</button>
+    </form>
+    <div id="payment-summary" class="summary-box" style="display:none">
+      <h3>💰 Payment सारांश</h3>
+      <div class="summary-row"><span>एकूण टन</span><span id="p-tons">-</span></div>
+      <div class="summary-row"><span>एकूण कमाई</span><span id="p-total">-</span></div>
+      <div class="summary-row"><span>बाकी पैसे</span><span id="p-pending">-</span></div>
+    </div>
+    <button class="btn-secondary" onclick="loadPayment()">Payment पहा</button>
+  </section>
+
+  <!-- 5. AI CHATBOT -->
+  <section id="chatbot" class="section">
+    <h2>🤖 AI Smart Assistant</h2>
+    <p class="hint">मराठी / हिंदी मध्ये विचारा</p>
+    <div class="chat-box" id="chat-box">
+      <div class="chat-msg bot">नमस्कार! मी तुमचा AI सहाय्यक आहे. काम, पैसे, हवामान किंवा आरोग्याबद्दल विचारा.</div>
+    </div>
+    <div class="chat-input-row">
+      <input type="text" id="chat-input" placeholder="येथे टाइप करा..." onkeydown="if(event.key==='Enter') sendChat()" />
+      <button class="btn-primary" onclick="sendChat()"><i class="fa fa-paper-plane"></i></button>
+      <button class="btn-secondary" onclick="startVoice()" title="Voice Input"><i class="fa fa-microphone"></i></button>
+    </div>
+  </section>
+
+  <!-- 6. HEALTH & SAFETY -->
+  <section id="health" class="section">
+    <h2>🏥 Health & Safety</h2>
+    <div class="card-grid">
+      <div class="card red" onclick="showHealthTip('heatstroke')">
+        <i class="fa fa-thermometer-full"></i>
+        <h3>उष्माघात</h3>
+        <p>लक्षणे व उपाय</p>
+      </div>
+      <div class="card orange" onclick="showHealthTip('injury')">
+        <i class="fa fa-band-aid"></i>
+        <h3>जखम / दुखापत</h3>
+        <p>प्रथमोपचार</p>
+      </div>
+      <div class="card blue" onclick="showHealthTip('snake')">
+        <i class="fa fa-exclamation-circle"></i>
+        <h3>साप चावणे</h3>
+        <p>तातडीचे उपाय</p>
+      </div>
+      <div class="card green" onclick="showHealthTip('water')">
+        <i class="fa fa-tint"></i>
+        <h3>पाणी व पोषण</h3>
+        <p>दैनंदिन टिप्स</p>
+      </div>
+    </div>
+    <div id="health-tip-box" class="tip-box" style="display:none"></div>
+    <div class="emergency-box">
+      <h3>🚨 Emergency</h3>
+      <a href="tel:108" class="btn-danger"><i class="fa fa-ambulance"></i> 108 - Ambulance</a>
+      <a href="tel:112" class="btn-danger"><i class="fa fa-phone"></i> 112 - Police</a>
+    </div>
+  </section>
+
+  <!-- 7. CROP AI -->
+  <section id="crop" class="section">
+    <h2>🌿 Sugarcane Crop AI</h2>
+    <div class="form">
+      <label>📸 पिकाचा फोटो अपलोड करा (रोग तपासणीसाठी)</label>
+      <input type="file" id="crop-image" accept="image/*" />
+      <button class="btn-primary" onclick="detectDisease()"><i class="fa fa-search"></i> रोग तपासा</button>
+    </div>
+    <div id="crop-result" class="result-box" style="display:none"></div>
+    <div class="card-grid" style="margin-top:1rem">
+      <div class="card green">
+        <i class="fa fa-bug"></i>
+        <h3>कीड अलर्ट</h3>
+        <p>Pyrilla: Imidacloprid फवारा</p>
+      </div>
+      <div class="card blue">
+        <i class="fa fa-tint"></i>
+        <h3>पाणी सुचवणी</h3>
+        <p>आठवड्यातून 2 वेळा सिंचन</p>
+      </div>
+      <div class="card orange">
+        <i class="fa fa-flask"></i>
+        <h3>खत सुचवणी</h3>
+        <p>Urea: 150 kg/acre</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. GOVT SCHEMES -->
+  <section id="schemes" class="section">
+    <h2>📜 सरकारी योजना</h2>
+    <div class="scheme-list">
+      <div class="scheme-card">
+        <h3>PM Shram Yogi Mandhan</h3>
+        <p>असंघटित कामगारांसाठी पेन्शन योजना. वय 18-40. ₹3000/महिना पेन्शन.</p>
+        <a href="https://maandhan.in" target="_blank" class="btn-secondary">अधिक माहिती</a>
+      </div>
+      <div class="scheme-card">
+        <h3>ESIC (कामगार विमा)</h3>
+        <p>आजारपण, अपघात, मातृत्व लाभ. नोंदणी नियोक्त्याद्वारे.</p>
+        <a href="https://esic.gov.in" target="_blank" class="btn-secondary">अधिक माहिती</a>
+      </div>
+      <div class="scheme-card">
+        <h3>PM Kisan Samman Nidhi</h3>
+        <p>शेतकऱ्यांना ₹6000/वर्ष थेट बँकेत. जमीन नोंदणी आवश्यक.</p>
+        <a href="https://pmkisan.gov.in" target="_blank" class="btn-secondary">अधिक माहिती</a>
+      </div>
+      <div class="scheme-card">
+        <h3>Maharashtra Kamgar Kalyan</h3>
+        <p>बांधकाम व शेती कामगारांसाठी शिक्षण, आरोग्य, विमा लाभ.</p>
+        <a href="https://mahabocw.in" target="_blank" class="btn-secondary">अधिक माहिती</a>
+      </div>
+      <div class="scheme-card">
+        <h3>Pradhan Mantri Fasal Bima</h3>
+        <p>पीक विमा योजना. नैसर्गिक आपत्तीत नुकसान भरपाई.</p>
+        <a href="https://pmfby.gov.in" target="_blank" class="btn-secondary">अधिक माहिती</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. FACTORY INFO -->
+  <section id="factory" class="section">
+    <h2>🏭 Sugar Factory माहिती</h2>
+    <form id="factory-form" class="form">
+      <input type="text" id="f-name" placeholder="कारखान्याचे नाव" required />
+      <input type="text" id="f-location" placeholder="ठिकाण" />
+      <input type="text" id="f-district" placeholder="जिल्हा" />
+      <input type="number" id="f-rate" placeholder="दर प्रति टन (₹)" />
+      <input type="text" id="f-contact" placeholder="संपर्क नंबर" />
+      <button type="submit" class="btn-primary">कारखाना जोडा</button>
+    </form>
+    <div id="factory-list" class="list-box"></div>
+  </section>
+
+  <!-- 10. CONTRACTOR PANEL -->
+  <section id="contractor" class="section">
+    <h2>👷 Contractor Panel</h2>
+    <div class="card-grid">
+      <div class="card green" onclick="showSection('worker')">
+        <i class="fa fa-user-plus"></i>
+        <h3>कामगार जोडा</h3>
+      </div>
+      <div class="card blue" onclick="loadAllWorkers()">
+        <i class="fa fa-users"></i>
+        <h3>सर्व कामगार</h3>
+      </div>
+      <div class="card orange" onclick="showSection('attendance')">
+        <i class="fa fa-calendar-check"></i>
+        <h3>Attendance</h3>
+      </div>
+      <div class="card red" onclick="showSection('location')">
+        <i class="fa fa-map-marked-alt"></i>
+        <h3>Location Track</h3>
+      </div>
+    </div>
+    <div id="contractor-workers" class="list-box"></div>
+  </section>
+
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
