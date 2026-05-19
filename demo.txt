@@ -5,15 +5,3 @@ SiteRoast is a fun yet practical web application that analyzes websites and prov
 🔍 SEO suggestions
 🛡️ Security insights
 😂 Funny AI-generated website roasts
-
-
-
-
-🌐 Analyze any public website URL
-🤖 AI-generated website roast
-🎨 UI/UX improvement suggestions
-⚡ Performance & responsiveness feedback
-🔍 SEO observations
-🛡️ Basic security checks
-📱 Responsive modern interface
-🌙 Clean and user-friendly desi
